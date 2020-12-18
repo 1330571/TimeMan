@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/proTimeManager?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: Xu1330571
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 8081
