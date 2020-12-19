@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Xu Yusheng
@@ -37,5 +37,5 @@ public class Task implements Serializable {
 
     private Integer schemeId;
 
-
+    private String taskTitle;
 }

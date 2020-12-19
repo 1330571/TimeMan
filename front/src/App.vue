@@ -54,7 +54,7 @@ export default {
     HuangShenNB: function () {
       alert('黄神武帝')
     },
-    messageit: function (name) {
+    messageIt: function (name) {
       alert('you click ' + name)
     }
   }
