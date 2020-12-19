@@ -1,8 +1,9 @@
 <template>
   <div class="home">
     <h1>Every should equipped tools to manage time</h1>
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Vue logo"
+         src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
