@@ -1,5 +1,36 @@
 <template>
   <nav>
+    <!-- FIXME open snackbar when alerts -->
+    <div class="text-center">
+      <!--          <v-btn-->
+      <!--            dark-->
+      <!--            color="orange darken-2"-->
+      <!--            @click="snackbar = true"-->
+      <!--          >-->
+      <!--            Open Snackbar-->
+      <!--          </v-btn>-->
+
+      <v-snackbar
+        :color="snackbarColor"
+        v-model="snackbar"
+        :timeout="3000"
+        top
+      >
+        {{ text }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            CLOSE
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+
     <v-app-bar flat
                fixed
                app>
@@ -43,20 +74,16 @@
                        :to="link.router">
             <v-list-item-title>
               <v-icon small
-                      class="mx-1">{{ link.icon }}</v-icon>
+                      class="mx-1">{{ link.icon }}
+              </v-icon>
               <span class="ml-1">{{ link.text }}</span>
             </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
 
-      <v-btn text
-             color="grey"
-             @click="signIn"
-             v-if="!logged">
-        <span> Sign In</span>
-        <v-icon right>mdi-login</v-icon>
-      </v-btn>
+      <SignIn ref="signInComponent" @alertFromNavVar="showMessage" v-if="!logged"></SignIn>
+
       <v-btn text
              color="grey"
              @click="signOut"
@@ -82,7 +109,7 @@
           </p>
         </v-flex>
         <v-flex class="mt-4 mb-3">
-          <Popup></Popup>
+          <Popup @taskAdd="showMessage"></Popup>
         </v-flex>
       </v-col>
 
@@ -107,13 +134,17 @@
 
 <script>
 import Popup from '@/components/StartTaskPopup'
+import SignIn from '@/components/SignIn'
 
 export default {
-  components: { Popup },
+  components: { SignIn, Popup },
   data: function () {
     return {
+      snackbar: false,
       drawer: false,
       logged: false,
+      snackbarColor: 'green',
+      text: '',
       links: [
         { icon: 'mdi-view-dashboard', text: 'DashBoard', router: '/' },
         { icon: 'mdi-folder', text: 'My Projects', router: '/projects' },
@@ -124,6 +155,7 @@ export default {
   },
   methods: {
     changeTheme: function () {
+      console.log(this.$refs.signInComponent.loginLoading)
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
     signIn: function () {
@@ -131,6 +163,18 @@ export default {
     },
     signOut: function () {
       alert('Sign Out, WIP')
+    },
+    alertFromNavBar: function () {
+      alert('Just a nop information')
+    },
+    showMessage: function (message, status) {
+      this.text = message
+      this.snackbar = true
+      if (status == null) {
+        this.snackbarColor = 'black'
+      } else {
+        this.snackbarColor = status
+      }
     }
   }
 }

@@ -38,8 +38,8 @@
               </v-date-picker>
             </v-menu>
             <v-spacer></v-spacer>
-            <v-btn outlined class="mx-1 mt-3" @click="queryTask(999)">Query Project</v-btn>
-            <v-btn outlined class="mx-1 mt-3" @click="submitTask">Add Project</v-btn>
+            <v-btn outlined class="mx-1 mt-3" :loading="submitLoading" @click="queryTask(999)">Query Project</v-btn>
+            <v-btn outlined class="mx-1 mt-3" :loading="submitLoading" @click="submitTask">Add Project</v-btn>
           </v-row>
         </v-form>
       </v-card-text>
@@ -57,11 +57,13 @@ export default {
       title: '',
       description: '',
       due: '',
-      date: new Date()
+      date: new Date(),
+      submitLoading: false
     }
   },
   methods: {
     submitTask: function () {
+      this.submitLoading = true
       this.date = new Date()
       axios.post('http://localhost:8081/task/submitPersonal', {
         description: this.description,
@@ -74,6 +76,8 @@ export default {
       this.due = ''
       this.title = ''
       this.description = ''
+      this.submitLoading = false
+      this.$emit('taskAdd', 'Task added')
     },
     queryTask: function (id) {
       axios.get('http://localhost:8081/task/queryTask/' + id).then(response => {

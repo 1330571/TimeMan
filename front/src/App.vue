@@ -56,6 +56,9 @@ export default {
     },
     messageIt: function (name) {
       alert('you click ' + name)
+    },
+    loginAccount: function (account, password) {
+
     }
   }
 }
