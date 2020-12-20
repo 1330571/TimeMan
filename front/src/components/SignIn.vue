@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   components: {},
   data: function () {
@@ -41,8 +43,25 @@ export default {
   },
   methods: {
     login: function () {
+      if (this.account === '' || this.password === '') {
+        this.$emit('alertFromNavVar', 'Empty Username or Password')
+        return
+      }
       this.loginLoading = true
-      this.$emit('alertFromNavVar', 'Login Success')
+      axios.post('http://localhost:8081/user/login', {
+        userAccount: this.account,
+        password: this.password
+      }).then(response => {
+        console.log('Login Function ' + response.data)
+        if (response.data !== 'Error') {
+          this.$emit('alertFromNavVar', 'Login Success')
+          this.$store.commit('setUserID', parseInt(response.data))
+          this.$store.commit('loginUser', this.account)
+        } else {
+          this.$emit('alertFromNavVar', 'Wrong Username or Password')
+        }
+      })
+
       this.loginLoading = false
     }
   }

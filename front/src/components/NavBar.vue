@@ -48,6 +48,7 @@
         <span class="font-weight-light">Pro</span>
         <span> TimeMan</span>
       </v-toolbar-title>
+
       <v-spacer></v-spacer>
       <v-btn text
              color="grey"
@@ -84,6 +85,10 @@
 
       <SignIn ref="signInComponent" @alertFromNavVar="showMessage" v-if="!logged"></SignIn>
 
+      <v-btn text color="grey darken-1" class="text-capitalize text-center" v-if="loginUser !== ''">
+        Hello, {{ loginUser }}
+      </v-btn>
+
       <v-btn text
              color="grey"
              @click="signOut"
@@ -91,6 +96,7 @@
         <span> Sign Out</span>
         <v-icon right>mdi-exit-to-app</v-icon>
       </v-btn>
+
     </v-app-bar>
 
     <v-navigation-drawer absolute
@@ -142,7 +148,7 @@ export default {
     return {
       snackbar: false,
       drawer: false,
-      logged: false,
+      // logged: false,
       snackbarColor: 'green',
       text: '',
       links: [
@@ -153,16 +159,27 @@ export default {
       ]
     }
   },
+  computed: {
+    loginUser () {
+      return this.$store.state.userID
+    },
+    logged () {
+      return this.loginUser !== ''
+    }
+  },
   methods: {
     changeTheme: function () {
-      console.log(this.$refs.signInComponent.loginLoading)
+      // below two lines are used for learning vuex and parent-child component value access
+      // console.log(this.$refs.signInComponent.loginLoading)
+      this.$store.commit('increment')
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
     signIn: function () {
       alert('Sign In, WIP')
     },
     signOut: function () {
-      alert('Sign Out, WIP')
+      this.$store.commit('loginUser', '')
+      this.showMessage('Logged Out')
     },
     alertFromNavBar: function () {
       alert('Just a nop information')

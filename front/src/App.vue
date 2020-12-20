@@ -58,7 +58,7 @@ export default {
       alert('you click ' + name)
     },
     loginAccount: function (account, password) {
-
+    // deprecated cause write it in the SignIn.vue and use vuex to manage state
     }
   }
 }

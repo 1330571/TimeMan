@@ -38,7 +38,7 @@ public class UserController {
         if (user == null) return "Bad Request";
         User _user = userService.getOne(new QueryWrapper<User>().eq("user_account", user.getUserAccount()));
         if (_user != null && user.getPassword().equals(_user.getPassword()))
-            return "Success";
+            return _user.getId().toString();
         else
             return "Error";
     }
