@@ -4,8 +4,11 @@ package com.xys.timemgr.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xys.timemgr.entity.User;
 import com.xys.timemgr.service.impl.UserServiceImpl;
+import com.xys.timemgr.utils.DataConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -33,13 +36,15 @@ public class UserController {
 //        return userService.getOne(queryWrapper).getUserName();
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public String login(@RequestBody User user, HttpSession session) throws InterruptedException {
+        Thread.sleep(1000);
         System.out.println(user);
         if (user == null) return "Bad Request";
         User _user = userService.getOne(new QueryWrapper<User>().eq("user_account", user.getUserAccount()));
-        if (_user != null && user.getPassword().equals(_user.getPassword()))
+        if (_user != null && user.getPassword().equals(_user.getPassword())) {
+            session.setAttribute("loginUser", _user.getId().toString());
             return _user.getId().toString();
-        else
+        } else
             return "Error";
     }
 
@@ -49,5 +54,9 @@ public class UserController {
         return userService.getOne(new QueryWrapper<User>().eq("id", id));
     }
 
-
+    @GetMapping("/getTaskIds/{id}")
+    public String[] getTaskIds(@PathVariable("id") Integer id) {
+        System.out.println("Query All Tasks ..." + id);
+        return DataConvert.splitString(userService.getOne(new QueryWrapper<User>().eq("id", id)).getTasks());
+    }
 }

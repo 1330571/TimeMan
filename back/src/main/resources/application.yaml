@@ -9,5 +9,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mvc:
+    format:
+      date: dd/MM/yyyy
 server:
   port: 8081

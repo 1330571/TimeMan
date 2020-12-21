@@ -17,10 +17,10 @@
             </v-tooltip>
           </v-responsive>
           <v-card-text>
-            <div class="text-sm-center text-sm-h6">
+            <div class="text-sm-center text-h4">
               {{ team.name }}
             </div>
-            <div class="text-sm-center grey--text">
+            <div class="text-sm-center grey--text mt-3">
               {{ team.desc }}
             </div>
           </v-card-text>
@@ -62,7 +62,8 @@ export default {
   methods: {
     getColor: function (num) {
       if (num === 0) return 'green'
-      if (num <= 3) return 'orange darken-1 '
+      if (num <= 3) return 'blue '
+      if (num <= 5) return 'orange darken-1 '
       return 'red'
     }
   }

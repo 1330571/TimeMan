@@ -25,7 +25,7 @@ public class CodeGen {
      * 读取控制台内容
      * </p>
      */
-    static String formInfo = "time_class,comment,task_group,request,review,scheme,tag,task,user";
+    static String formInfo = "time_class,comment,task_group,request,review,scheme,tag,task,user,user_avatar";
 
     public static String scanner(String tip) {
         Scanner scanner = new Scanner(System.in);

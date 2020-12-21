@@ -10,21 +10,17 @@
       <!--            Open Snackbar-->
       <!--          </v-btn>-->
 
-      <v-snackbar
-        :color="snackbarColor"
-        v-model="snackbar"
-        :timeout="3000"
-        top
-      >
+      <v-snackbar :color="snackbarColor"
+                  v-model="snackbar"
+                  :timeout="3000"
+                  top>
         {{ text }}
 
         <template v-slot:action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="snackbar = false"
-          >
+          <v-btn color="pink"
+                 text
+                 v-bind="attrs"
+                 @click="snackbar = false">
             CLOSE
           </v-btn>
         </template>
@@ -83,9 +79,14 @@
         </v-list>
       </v-menu>
 
-      <SignIn ref="signInComponent" @alertFromNavVar="showMessage" v-if="!logged"></SignIn>
+      <SignIn ref="signInComponent"
+              @alertFromNavVar="showMessage"
+              v-if="!logged"></SignIn>
 
-      <v-btn text color="grey darken-1" class="text-capitalize text-center" v-if="loginUser !== ''">
+      <v-btn text
+             color="grey darken-1"
+             class="text-capitalize text-center"
+             v-if="loginUser !== ''">
         Hello, {{ loginUser }}
       </v-btn>
 
@@ -113,6 +114,19 @@
           <p class="text-center grey--text text-h6 mt-1">
             Yoshi
           </p>
+          <v-row>
+            <template>
+              <v-file-input accept="image/*"
+                            label="File input"
+                            show-size
+                            v-model="fileURI"></v-file-input>
+            </template>
+            <v-spacer></v-spacer>
+            <div class="align-self-center">
+              <v-btn class="text-center" @click="submitFile">upload</v-btn>
+            </div>
+            <v-spacer></v-spacer>
+          </v-row>
         </v-flex>
         <v-flex class="mt-4 mb-3">
           <Popup @taskAdd="showMessage"></Popup>
@@ -141,11 +155,15 @@
 <script>
 import Popup from '@/components/StartTaskPopup'
 import SignIn from '@/components/SignIn'
+// eslint-disable-next-line no-unused-vars
+import axios from 'axios'
+import fileUploader from '@/lib/fileUploader'
 
 export default {
   components: { SignIn, Popup },
   data: function () {
     return {
+      fileURI: '',
       snackbar: false,
       drawer: false,
       // logged: false,
@@ -153,7 +171,7 @@ export default {
       text: '',
       links: [
         { icon: 'mdi-view-dashboard', text: 'DashBoard', router: '/' },
-        { icon: 'mdi-folder', text: 'My Projects', router: '/projects' },
+        { icon: 'mdi-folder', text: 'My Tasks', router: '/projects' },
         { icon: 'mdi-account-supervisor', text: 'Team', router: '/team' },
         { icon: 'mdi-home', text: 'Home', router: '/home' }
       ]
@@ -168,6 +186,9 @@ export default {
     }
   },
   methods: {
+    submitFile: function () {
+      fileUploader.upload(this.fileURI)
+    },
     changeTheme: function () {
       // below two lines are used for learning vuex and parent-child component value access
       // console.log(this.$refs.signInComponent.loginLoading)

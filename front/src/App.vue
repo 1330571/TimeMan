@@ -22,7 +22,14 @@ Vue.use(Vuetify)
 export default {
 
   name: 'App',
-
+  created () {
+    axios.get('http://localhost:8081/user/getTaskIds/1').then(response => {
+      console.log(response)
+      axios.post('http://localhost:8081/task/queryTaskByIdArr', { data: response.data }).then(response => {
+        console.log(response)
+      })
+    })
+  },
   components: {
     // HelloWorld
     NavBar
@@ -58,7 +65,7 @@ export default {
       alert('you click ' + name)
     },
     loginAccount: function (account, password) {
-    // deprecated cause write it in the SignIn.vue and use vuex to manage state
+      // deprecated cause write it in the SignIn.vue and use vuex to manage state
     }
   }
 }

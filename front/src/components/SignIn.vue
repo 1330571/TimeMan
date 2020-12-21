@@ -57,12 +57,12 @@ export default {
           this.$emit('alertFromNavVar', 'Login Success')
           this.$store.commit('setUserID', parseInt(response.data))
           this.$store.commit('loginUser', this.account)
+          this.loginLoading = false
         } else {
           this.$emit('alertFromNavVar', 'Wrong Username or Password')
+          this.loginLoading = false
         }
       })
-
-      this.loginLoading = false
     }
   }
 }
