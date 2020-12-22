@@ -3,7 +3,11 @@ package com.xys.timemgr.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xys.timemgr.entity.Task;
+import com.xys.timemgr.entity.User;
 import com.xys.timemgr.mapper.TaskMapper;
+import com.xys.timemgr.mapper.UserMapper;
+import com.xys.timemgr.service.impl.TaskServiceImpl;
+import com.xys.timemgr.utils.DataConvert;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +31,23 @@ public class TaskController {
     @Autowired
     TaskMapper taskMapper;
 
+    @Autowired
+    TaskServiceImpl taskService;
+
+    @Autowired
+    UserMapper userMapper;
+
     @PostMapping("/submitPersonal")
     public String submitPersonalTask(@RequestBody Task task) {
         System.out.println("Submit " + task);
         if (task == null) return "Bad Request";
-//        taskMapper.insert(task);
-        return "Heart Beat";
+        taskService.save(task);
+        //then put this task into user
+        User user = userMapper.selectById(task.getUserList());
+        System.out.println(user.toString());
+        user.setTasks(user.getTasks() + "_" + task.getId());
+        userMapper.updateById(user);
+        return "Ok";
     }
 
     @GetMapping("/queryTask/{id}")
@@ -42,7 +57,8 @@ public class TaskController {
     }
 
     @PostMapping("/queryTaskByIdArr")
-    public List<Task> queryTasksByIdArr(@RequestBody StringWrapper stringWrapper) {
+    public List<Task> queryTasksByIdArr(@RequestBody StringWrapper stringWrapper) throws InterruptedException {
+        Thread.sleep(500);
         String[] strings = stringWrapper.getData();
         System.out.println("QueryTaskByIDAddr" + Arrays.toString(strings));
         ArrayList<Task> arrayList = new ArrayList<>();
@@ -52,9 +68,38 @@ public class TaskController {
         }
         return arrayList;
     }
+
+    @GetMapping("/getState/{userID}/{taskID}")
+    public int queryTask(@PathVariable("userID") Integer id, @PathVariable("taskID") Integer taskId) {
+        Task task = taskMapper.selectById(taskId);
+        String[] taskStr = DataConvert.splitString(task.getUserList());
+        String[] statusStr = DataConvert.splitString(task.getStatesList());
+        int length = taskStr.length;
+        for (int i = 0; i < length; ++i)
+            if (Integer.parseInt(taskStr[i]) == id)
+                return Integer.parseInt(statusStr[i]);
+        return 4;
+    }
+
+    @GetMapping("/setState/{userID}/{taskID}/{status}")
+    public void setTask(@PathVariable("userID") Integer id, @PathVariable("taskID") Integer taskId, @PathVariable("status") Integer status) {
+        Task task = taskMapper.selectById(taskId);
+        String[] taskStr = DataConvert.splitString(task.getUserList());
+        String[] statusStr = DataConvert.splitString(task.getStatesList());
+        int length = taskStr.length;
+        for (int i = 0; i < length; ++i)
+            if (Integer.parseInt(taskStr[i]) == id)
+                statusStr[i] = status.toString();
+
+        String newTaskStr = DataConvert.concatString(taskStr);
+        String newStatusStr = DataConvert.concatString(statusStr);
+
+        task.setStatesList(newStatusStr);
+        taskMapper.updateById(task);
+    }
 }
 
 @Data
-class StringWrapper{
+class StringWrapper {
     private String[] data;
 }

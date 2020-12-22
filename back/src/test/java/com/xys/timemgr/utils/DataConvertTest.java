@@ -22,7 +22,7 @@ class DataConvertTest {
     void concatString() {
         DataSource dataSource = new DataSource();
         String result = DataConvert.concatString(dataSource);
-        assertEquals("AB_CD_EF_", result);
+        assertEquals("AB_CD_EF", result);
     }
 
     @Test

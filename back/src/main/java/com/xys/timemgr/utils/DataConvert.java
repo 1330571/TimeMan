@@ -23,7 +23,20 @@ public class DataConvert {
             stringBuilder.append(str);
             stringBuilder.append('_');
         }
-        return stringBuilder.toString();
+        String temp = stringBuilder.toString();
+        temp = temp.substring(0, temp.length() - 1);
+        return temp;
+    }
+
+    public static String concatString(String[] source) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String str : source) {
+            stringBuilder.append(str);
+            stringBuilder.append('_');
+        }
+        String temp = stringBuilder.toString();
+        temp = temp.substring(0, temp.length() - 1);
+        return temp;
     }
 
     /**

@@ -2,7 +2,7 @@
   <v-app>
     <nav-bar></nav-bar>
     <v-main class="mx-4 my-4">
-      <router-view>
+      <router-view v-if="RouterState">
 
       </router-view>
     </v-main>
@@ -23,7 +23,8 @@ export default {
 
   name: 'App',
   created () {
-    axios.get('http://localhost:8081/user/getTaskIds/1').then(response => {
+    this.$vuetify.theme.dark = true
+    axios.get('http://localhost:8081/user/getTaskIds/1').then(function (response) {
       console.log(response)
       axios.post('http://localhost:8081/task/queryTaskByIdArr', { data: response.data }).then(response => {
         console.log(response)
@@ -34,8 +35,13 @@ export default {
     // HelloWorld
     NavBar
   },
-
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
   data: () => ({
+    RouterState: true,
     name: 'XYS',
     drawer: null,
     tags: ['Study', 'Game', 'Animation', 'Draw'],
@@ -43,6 +49,12 @@ export default {
   }),
 
   methods: {
+    reload () {
+      this.RouterState = false
+      this.$nextTick(() => {
+        this.RouterState = true
+      })
+    },
     Query: function () {
       axios.get('http://localhost:8081/user/getName/admin').then(function (response) {
         console.log(response)

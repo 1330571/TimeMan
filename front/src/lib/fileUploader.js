@@ -1,11 +1,11 @@
 import http from 'axios'
 
 class UploadFilesService {
-  upload (file, user, onUploadProgress) {
+  async upload (file, user, onUploadProgress) {
     const formData = new FormData()
 
     formData.append('file', file)
-    formData.append('user', 1000)
+    formData.append('user', user)
     return http.post('http://localhost:8081/file/pic', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -14,8 +14,9 @@ class UploadFilesService {
     })
   }
 
+  // @Deprecated
   getFiles () {
-    return http.get('/files')
+    return http.get('')
   }
 }
 

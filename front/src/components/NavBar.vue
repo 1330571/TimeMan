@@ -46,6 +46,16 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+      <JoinGroup @taskAdd="showMessage"></JoinGroup>
+
+      <popup :iconShow=true @taskAdd="showMessage"></popup>
+
+      <v-btn text
+             color="grey"
+             @click="func">
+        <v-icon>mdi-refresh</v-icon>
+      </v-btn>
       <v-btn text
              color="grey"
              @click="changeTheme()">
@@ -106,27 +116,32 @@
       <v-col align-self="center">
         <v-flex class="mt-5">
           <div class="text-center">
-            <v-avatar size="130">
-              <img src="../../public/yoshi.png"
-                   elt="network Error">
+            <v-avatar size="130" class="headline">
+              <img v-if="imgURL===''" src="../../public/yoshi.png"
+                   alt="network Error">
+              <img v-if="imgURL!==''" :src="'http://localhost:8081/file/read/' + imgURL"
+                   :alt="'ID: ' + this.$store.state.id">
             </v-avatar>
           </div>
           <p class="text-center grey--text text-h6 mt-1">
-            Yoshi
+            {{ this.$store.state.userID !== '' ? this.$store.state.userID : 'YoShi' }}
           </p>
+
           <v-row>
             <template>
-              <v-file-input accept="image/*"
-                            label="File input"
-                            show-size
-                            v-model="fileURI"></v-file-input>
+              <v-file-input
+                accept="image/*"
+                label="File input"
+                show-size
+                v-model="fileURI">
+              </v-file-input>
             </template>
             <v-spacer></v-spacer>
             <div class="align-self-center">
               <v-btn class="text-center" @click="submitFile">upload</v-btn>
             </div>
-            <v-spacer></v-spacer>
           </v-row>
+
         </v-flex>
         <v-flex class="mt-4 mb-3">
           <Popup @taskAdd="showMessage"></Popup>
@@ -158,9 +173,11 @@ import SignIn from '@/components/SignIn'
 // eslint-disable-next-line no-unused-vars
 import axios from 'axios'
 import fileUploader from '@/lib/fileUploader'
+import JoinGroup from '@/components/JoinGroup'
 
 export default {
-  components: { SignIn, Popup },
+  inject: ['reload'],
+  components: { SignIn, Popup, JoinGroup },
   data: function () {
     return {
       fileURI: '',
@@ -171,13 +188,16 @@ export default {
       text: '',
       links: [
         { icon: 'mdi-view-dashboard', text: 'DashBoard', router: '/' },
-        { icon: 'mdi-folder', text: 'My Tasks', router: '/projects' },
+        { icon: 'mdi-folder', text: 'Personal Tasks', router: '/projects' },
         { icon: 'mdi-account-supervisor', text: 'Team', router: '/team' },
         { icon: 'mdi-home', text: 'Home', router: '/home' }
       ]
     }
   },
   computed: {
+    imgURL () {
+      return this.$store.state.imgUrl
+    },
     loginUser () {
       return this.$store.state.userID
     },
@@ -186,8 +206,17 @@ export default {
     }
   },
   methods: {
-    submitFile: function () {
-      fileUploader.upload(this.fileURI)
+    func: function () {
+      this.reload()
+      this.showMessage('This page was refreshed')
+    },
+    submitFile: async function () {
+      if (this.$store.state.userID !== '') {
+        await fileUploader.upload(this.fileURI, this.$store.state.id)
+        this.showMessage('Upload success')
+      } else {
+        this.showMessage('Please log in first')
+      }
     },
     changeTheme: function () {
       // below two lines are used for learning vuex and parent-child component value access
@@ -200,6 +229,8 @@ export default {
     },
     signOut: function () {
       this.$store.commit('loginUser', '')
+      this.$store.commit('setImgURL', '')
+      this.reload()
       this.showMessage('Logged Out')
     },
     alertFromNavBar: function () {

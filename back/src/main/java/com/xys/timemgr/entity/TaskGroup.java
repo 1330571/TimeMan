@@ -1,12 +1,13 @@
 package com.xys.timemgr.entity;
 
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Xu Yusheng
@@ -22,7 +23,7 @@ public class TaskGroup implements Serializable {
 
     private String classList;
 
-    private String memeberList;
+    private String memberList;
 
     private String taskList;
 
@@ -34,5 +35,5 @@ public class TaskGroup implements Serializable {
 
     private Integer linkCode;
 
-
+    private String groupDesc;
 }

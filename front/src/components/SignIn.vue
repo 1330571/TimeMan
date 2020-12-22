@@ -41,6 +41,7 @@ export default {
       password: ''
     }
   },
+  inject: ['reload'],
   methods: {
     login: function () {
       if (this.account === '' || this.password === '') {
@@ -48,16 +49,19 @@ export default {
         return
       }
       this.loginLoading = true
+
       axios.post('http://localhost:8081/user/login', {
         userAccount: this.account,
         password: this.password
       }).then(response => {
         console.log('Login Function ' + response.data)
         if (response.data !== 'Error') {
-          this.$emit('alertFromNavVar', 'Login Success')
           this.$store.commit('setUserID', parseInt(response.data))
           this.$store.commit('loginUser', this.account)
+          this.$store.commit('setImgURL', this.$store.state.id + 'avatar.png')
           this.loginLoading = false
+          this.reload()
+          this.$emit('alertFromNavVar', 'Login Success')
         } else {
           this.$emit('alertFromNavVar', 'Wrong Username or Password')
           this.loginLoading = false

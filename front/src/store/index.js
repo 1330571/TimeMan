@@ -7,7 +7,9 @@ export default new Vuex.Store({
   state: {
     count: 0,
     id: 0,
-    userID: ''
+    userID: '',
+    imgUrl: '',
+    userName: ''
   },
   mutations: {
     increment (state) {
@@ -21,6 +23,9 @@ export default new Vuex.Store({
     setUserID (state, id) {
       state.id = parseInt(id)
       console.log('login user success, private user modified -> ' + id)
+    },
+    setImgURL (state, url) {
+      state.imgUrl = url
     }
   },
   actions: {},

@@ -45,96 +45,96 @@
 
       <div>
 
-          <div class="text-center d-flex pb-4 ">
+        <div class="text-center d-flex pb-4 ">
 
-            <v-btn outlined class="mr-2" @click="all" large>
-              Expand All
-            </v-btn>
-            <!--                <div>{{ panel }}</div>-->
-            <v-btn outlined class="mx-2" large @click="none">
-              Fold All
-            </v-btn>
+          <v-btn outlined class="mr-2" @click="all" large>
+            Expand All
+          </v-btn>
+          <!--                <div>{{ panel }}</div>-->
+          <v-btn outlined class="mx-2" large @click="none">
+            Fold All
+          </v-btn>
 
-            <v-btn outlined class="mx-2" large @click="mostRecent">
-              Most Recent
-            </v-btn>
+          <v-btn outlined class="mx-2" large @click="mostRecent">
+            Most Recent
+          </v-btn>
 
-            <v-btn outlined class="mx-2" large @click="notWorry">
-              Not Worry
-            </v-btn>
+          <v-btn outlined class="mx-2" large @click="notWorry">
+            Not Worry
+          </v-btn>
 
-              <v-btn outlined class="mx-2" large @click="notWorry">
-              Out Dated
-            </v-btn>
-          </div>
+          <v-btn outlined class="mx-2" large @click="notWorry">
+            Out Dated
+          </v-btn>
+        </div>
 
-      <v-expansion-panels
-        v-model="panel"
-        multiple v-if="tasks===null"
-      >
-        <v-expansion-panel
-          v-for="(item,i) in items"
-          :key="i"
+        <v-expansion-panels
+          v-model="panel"
+          multiple v-if="tasks===null"
         >
-          <v-expansion-panel-header>Header {{ item }}</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-  </div>
+          <v-expansion-panel
+            v-for="(item,i) in items"
+            :key="i"
+          >
+            <v-expansion-panel-header>Header {{ item }}</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+              labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+              laboris nisi ut aliquip ex ea commodo consequat.
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
 
-  <div>
-    <v-expansion-panels
-      v-model="panel"
-      multiple v-if="tasks!==null"
-    >
-      <v-expansion-panel
-        v-for="(task,i) in tasks"
-        :key="i"
-      >
-        <v-expansion-panel-header>
+      <div>
+        <v-expansion-panels
+          v-model="panel"
+          multiple v-if="tasks!==null"
+        >
+          <v-expansion-panel
+            v-for="(task,i) in tasks"
+            :key="i"
+          >
+            <v-expansion-panel-header>
 
-          <v-row align="center" class="text-capitalize">
-            <v-icon color="orange" v-if="getPersonInfo(task).status ==='0'">mdi-help-network</v-icon>
-            <v-icon color="blue" v-if="getPersonInfo(task).status ==='1'">mdi-help-network</v-icon>
-            <v-icon color="green" v-if="getPersonInfo(task).status ==='2'">mdi-check-network</v-icon>
-            <v-icon color="red" v-if="getPersonInfo(task).status ==='3'">mdi-close-network</v-icon>
-            <v-icon color="black" v-if="getPersonInfo(task).status === '4'">mdi-close-network</v-icon>
-            <div class="text-h6 mx-1"> {{ task.taskTitle }}</div>
-            <v-spacer></v-spacer>
-            <div class="mx-3 text-caption">
-              <!--              {{ getPersonInfo(task).status }}-->
-              <v-btn small outlined :color="colors[getPersonInfo(task).status]">{{
-                  txt[getPersonInfo(task).status]
-                }}
-              </v-btn>
-            </div>
-            <div class="mx-5 text-body-2">Work In Progress</div>
-          </v-row>
+              <v-row align="center" class="text-capitalize">
+                <v-icon small color="orange" v-if="getPersonInfo(task).status ==='0'">mdi-help-network</v-icon>
+                <v-icon small color="blue" v-if="getPersonInfo(task).status ==='1'">mdi-help-network</v-icon>
+                <v-icon small color="green" v-if="getPersonInfo(task).status ==='2'">mdi-check-network</v-icon>
+                <v-icon small color="red" v-if="getPersonInfo(task).status ==='3'">mdi-close-network</v-icon>
+                <v-icon small color="black" v-if="getPersonInfo(task).status === '4'">mdi-close-network</v-icon>
+                <div class="text-sm-body-1 mx-1"> {{ task.taskTitle }}</div>
+                <v-spacer></v-spacer>
+                <div class="mx-3 text-caption">
+                  <!--              {{ getPersonInfo(task).status }}-->
+                  <v-btn x-small outlined :color="colors[getPersonInfo(task).status]">{{
+                      txt[getPersonInfo(task).status]
+                    }}
+                  </v-btn>
+                </div>
+                <div class="mx-5 text-body-2">Work In Progress</div>
+              </v-row>
 
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
 
-          <div class="text-body-1 mb-2 mx-2">{{ task.description }}</div>
-          <v-row>
-            <div class="mx-3 text-body-2">Assigner
-              <span class="blue-grey--text"> {{ ' ' + task.taskSender }}</span>
-            </div>
-            <v-spacer></v-spacer>
-            <div class="text-right text-caption">
-              {{ calcDay(task.deadline) }}
-              <v-icon small>mdi-calendar-alert</v-icon>
-              {{ formattedDate(task.deadline) }}
-            </div>
-          </v-row>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
-  </div>
-  </v-container>
+              <div class="text-body-1 mb-2 mx-2">{{ task.description }}</div>
+              <v-row>
+                <div class="mx-3 text-body-2">Assigner
+                  <span class="blue-grey--text"> {{ ' ' + task.taskSender }}</span>
+                </div>
+                <v-spacer></v-spacer>
+                <div class="text-right text-caption">
+                  {{ calcDay(task.deadline) }}
+                  <v-icon small>mdi-calendar-alert</v-icon>
+                  {{ formattedDate(task.deadline) }}
+                </div>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
+    </v-container>
   </div>
 </template>
 
@@ -148,7 +148,7 @@ export default {
   name: 'Projects',
   components: {},
   data: () => ({
-    items: ['Ocaml Course', 'Java Course', 'Linux Kernel', 'The Compilers'],
+    items: ['Ocaml Course (Template)', 'Java Course (Template)', 'Linux Kernel(Template)', 'The Compilers(Template)'],
     tasks: null,
     panel: [],
     dialog: false,
