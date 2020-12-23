@@ -80,7 +80,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn class="float-right" text color="blue" v-bind="attrs" v-on="on">
                   <v-icon small left>mdi-arrow-right-bold-hexagon-outline</v-icon>
-                  <span class="text-sm-body-2">more</span>
+                  <span class="text-sm-body-2" @click="jump(group)">more</span>
                 </v-btn>
               </template>
               <span>See Team Details</span>
@@ -115,6 +115,12 @@ export default {
     }
   },
   methods: {
+    jump: function (groupInfo) {
+      this.$router.push({
+        name: 'group',
+        params: { group: groupInfo }
+      })
+    },
     _calcAllTheTask: function () {
       axios.get('http://localhost:8081/user/getGroupIds/' + this.$store.state.id).then(response => {
         console.log('Groups Arr -> ', response.data)

@@ -58,7 +58,7 @@ public class TaskController {
 
     @PostMapping("/queryTaskByIdArr")
     public List<Task> queryTasksByIdArr(@RequestBody StringWrapper stringWrapper) throws InterruptedException {
-        Thread.sleep(500);
+        Thread.sleep(1);
         String[] strings = stringWrapper.getData();
         System.out.println("QueryTaskByIDAddr" + Arrays.toString(strings));
         ArrayList<Task> arrayList = new ArrayList<>();
@@ -96,6 +96,28 @@ public class TaskController {
 
         task.setStatesList(newStatusStr);
         taskMapper.updateById(task);
+    }
+
+    @GetMapping("/getComments/{taskId}")
+    public String[] getComments(@PathVariable("taskId") Integer id) {
+        Task task = taskMapper.selectById(id);
+        return DataConvert.splitString(task.getCommentsId());
+    }
+
+    @GetMapping("/insertComment/{taskID}/{commentID}")
+    public String insertComment(@PathVariable("taskID") Integer taskId, @PathVariable("commentID") Integer id) {
+        Task task = taskMapper.selectById(taskId);
+        String str = task.getCommentsId();
+        ArrayList<String> arrayList;
+        if (str != null) {
+            arrayList = (ArrayList<String>) DataConvert.splitStringList(str);
+        } else {
+            arrayList = new ArrayList<>();
+        }
+        arrayList.add(id.toString());
+        task.setCommentsId(DataConvert.concatString(arrayList));
+        taskMapper.updateById(task);
+        return "Comment Insert Into Task DB";
     }
 }
 

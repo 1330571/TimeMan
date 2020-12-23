@@ -127,6 +127,25 @@ public class UserController {
         String[] arr2 = arr.toArray(new String[0]);
         user.setTasks(DataConvert.concatString(arr2));
         userMapper.updateById(user);
+//        update task DB
+        Task task = taskMapper.selectById(taskId);
+        if (task != null) {
+            String[] userList = DataConvert.splitString(task.getUserList());
+            String[] statusList = DataConvert.splitString(task.getStatesList());
+            int len = userList.length;
+            ArrayList<String> newUsr = new ArrayList<>();
+            ArrayList<String> newStatus = new ArrayList<>();
+            for (int i = 0; i < len; ++i) {
+                if (!userList[i].equals(id.toString())) {
+                    newUsr.add(userList[i]);
+                    newStatus.add(statusList[i]);
+                }
+            }
+            task.setUserList(DataConvert.concatString(newUsr));
+            task.setStatesList(DataConvert.concatString(newStatus));
+            taskMapper.updateById(task);
+
+        }
     }
 
 }

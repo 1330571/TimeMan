@@ -27,6 +27,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('../views/Home.vue')
+  },
+  {
+    path: '/group',
+    name: 'group',
+    component: () => import('../views/Group.vue')
   }
 ]
 

@@ -2,9 +2,11 @@ package com.xys.timemgr.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xys.timemgr.entity.Task;
 import com.xys.timemgr.entity.TaskGroup;
 import com.xys.timemgr.entity.User;
 import com.xys.timemgr.mapper.TaskGroupMapper;
+import com.xys.timemgr.mapper.TaskMapper;
 import com.xys.timemgr.mapper.UserMapper;
 import com.xys.timemgr.utils.DataConvert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class TaskGroupController {
 
     @PostMapping("/AllGroup")
     public List<TaskGroup> getGroup(@RequestBody StringWrapper stringWrapper) throws InterruptedException {
-        Thread.sleep(1000);
+        Thread.sleep(1);
         System.out.println("All Group " + stringWrapper.toString());
         ArrayList<Integer> arrayList = new ArrayList<>();
         for (String groupStr : stringWrapper.getData()) {
@@ -71,6 +73,42 @@ public class TaskGroupController {
         user.setUserGroups(groups);
         userMapper.updateById(user);
         return "success";
+    }
+
+    @Autowired
+    TaskMapper taskMapper;
+
+    @PostMapping("/sendTask")
+    public String sendTask(@RequestBody Task task) {
+        System.out.println("Group Task Send!!!" + task.toString());
+        // we set task.id to the group ID
+        TaskGroup taskGroup = taskGroupMapper.selectById(task.getId());
+        task.setId(null);
+        String userArr = taskGroup.getMemberList();
+        String taskArr = taskGroup.getTaskList();
+        String[] users = DataConvert.splitString(userArr);
+        String[] tasks = DataConvert.splitString(taskArr);
+        String[] zeroArr = new String[users.length];
+        int idx = 0;
+        for (String uu : users)
+            zeroArr[idx++] = "0";
+        task.setUserList(userArr);
+        task.setStatesList(DataConvert.concatString(zeroArr)); //task update, manually set the userList and statusList
+        taskMapper.insert(task);
+        taskArr = taskArr + "_" + task.getId().toString();
+        taskGroup.setTaskList(taskArr);
+        taskGroupMapper.updateById(taskGroup); //taskGroup Update, update taskList
+
+        for (String user : users) {
+            int id = Integer.parseInt(user);
+            User user1 = userMapper.selectById(id);
+            String str = "";
+            if (user1.getTasks() != null) str = user1.getTasks();
+            str = str + "_" + task.getId();
+            user1.setTasks(str);
+            userMapper.updateById(user1);// user update , update taskList
+        }
+        return "Ok";
     }
 }
 

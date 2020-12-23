@@ -25,6 +25,7 @@ public class FileController {
     @Autowired
     UserAvatarMapper userAvatarMapper;
 
+
     @PostMapping("/pic")
     @ResponseBody
     public String upload(@RequestParam("file") MultipartFile file, @RequestParam("user") Integer id) {
@@ -71,5 +72,7 @@ public class FileController {
         toClient.close();
 
     }
+
+
 }
 
