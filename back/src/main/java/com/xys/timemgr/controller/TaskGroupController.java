@@ -29,6 +29,13 @@ public class TaskGroupController {
     @Autowired
     TaskGroupMapper taskGroupMapper;
 
+    @PostMapping("/CreateGroup")
+    public String createGroup(@RequestBody TaskGroup taskGroup) {
+        System.out.println(taskGroup.toString());
+        taskGroupMapper.insert(taskGroup);
+        return "Ok";
+    }
+
     @PostMapping("/AllGroup")
     public List<TaskGroup> getGroup(@RequestBody StringWrapper stringWrapper) throws InterruptedException {
         Thread.sleep(1);
@@ -50,17 +57,22 @@ public class TaskGroupController {
         if (taskGroup == null) return "invalid Join Code";
         String[] str = DataConvert.splitString(taskGroup.getMemberList());
         boolean alreadyIn = false;
-        for (String s : str) {
-            if (s.equals(id.toString())) {
-                alreadyIn = true;
-                break;
+
+        if (str != null) {
+            for (String s : str) {
+                if (s.equals(id.toString())) {
+                    alreadyIn = true;
+                    break;
+                }
             }
+            if (alreadyIn) return "you are already in this group";
+            String[] newStr = new String[str.length + 1];
+            System.arraycopy(str, 0, newStr, 0, str.length);
+            newStr[str.length] = id.toString();
+            taskGroup.setMemberList(DataConvert.concatString(newStr));
+        } else {
+            taskGroup.setMemberList(id.toString());
         }
-        if (alreadyIn) return "you are already in this group";
-        String[] newStr = new String[str.length + 1];
-        System.arraycopy(str, 0, newStr, 0, str.length);
-        newStr[str.length] = id.toString();
-        taskGroup.setMemberList(DataConvert.concatString(newStr));
         taskGroupMapper.updateById(taskGroup);
         //then add group to this user
         User user = userMapper.selectById(id);

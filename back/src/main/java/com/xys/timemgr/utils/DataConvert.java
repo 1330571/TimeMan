@@ -57,6 +57,7 @@ public class DataConvert {
      * @return 拆分的字符串数组
      */
     public static String[] splitString(String str) {
+        if (str == null) return null;
         return str.split("_");
     }
 

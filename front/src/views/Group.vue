@@ -102,7 +102,7 @@
                 :rules="rules"
                 counter="200"
                 hint="Write Comment Here"
-                label="Regular"
+                label="Content"
               ></v-text-field>
 
             </v-card-actions>
@@ -208,7 +208,7 @@
     </v-row>
     <v-row no-gutters class="mt-5">
       <v-col
-        cols="5"
+        cols="6"
         md="3"
       >
         <v-row>
@@ -217,7 +217,7 @@
             class="pa-2"
             outlined
             tile
-            v-for="user in group.memberList.split('_')"
+            v-for="user in meme"
             :key="user"
           >
             <!--          .col-12 .col-sm-6 .col-md-8-->
@@ -229,7 +229,7 @@
                 >
               </v-avatar>
             </v-card-title>
-            <v-card-text>{{ nameList[user] }}</v-card-text>
+            <v-card-text >{{ nameList[user] }}</v-card-text>
           </v-card>
         </v-row>
       </v-col>
@@ -340,11 +340,9 @@
                               </v-btn>
                             </v-list-item-content>
                           </v-list-item>
-
                         </v-list>
                       </v-menu>
                     </div>
-
                   </template>
                 </v-col>
               </div>
@@ -527,6 +525,11 @@ export default {
   computed: {
     formattedDate () {
       return this.due !== '' ? format(new Date(this.due), 'do MMM YYY') : ''
+    },
+    meme () {
+      let c = this.group.memberList
+      if (c[0] === '_') c = c.substr(1)
+      return c.split('_')
     }
   }
 }

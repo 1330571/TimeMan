@@ -48,6 +48,7 @@
       <v-spacer></v-spacer>
 
       <JoinGroup @taskAdd="showMessage"></JoinGroup>
+      <StartTaskGroupPopup @taskAdd="showMessage"></StartTaskGroupPopup>
 
       <popup :iconShow=true @taskAdd="showMessage"></popup>
 
@@ -174,10 +175,11 @@ import SignIn from '@/components/SignIn'
 import axios from 'axios'
 import fileUploader from '@/lib/fileUploader'
 import JoinGroup from '@/components/JoinGroup'
+import StartTaskGroupPopup from '@/components/StartTaskGroupPopup'
 
 export default {
   inject: ['reload'],
-  components: { SignIn, Popup, JoinGroup },
+  components: { SignIn, Popup, JoinGroup, StartTaskGroupPopup },
   data: function () {
     return {
       fileURI: '',
