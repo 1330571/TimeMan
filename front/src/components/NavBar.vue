@@ -193,7 +193,8 @@ export default {
         { icon: 'mdi-folder', text: 'Personal Tasks', router: '/projects' },
         { icon: 'mdi-account-supervisor', text: 'Team', router: '/team' },
         { icon: 'mdi-home', text: 'Home', router: '/home' },
-        { icon: 'mdi-ab-testing', text: 'Group', router: '/group' }
+        { icon: 'mdi-ab-testing', text: 'Group', router: '/group' },
+        { icon: 'mdi-tag', text: 'Tag', router: '/tag' }
       ]
     }
   },

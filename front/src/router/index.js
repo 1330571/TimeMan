@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
     path: '/group',
     name: 'group',
     component: () => import('../views/Group.vue')
+  },
+  {
+    path: '/tag',
+    name: 'tag',
+    component: () => import('../views/Tag')
   }
 ]
 
