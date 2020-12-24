@@ -131,6 +131,22 @@ public class TaskController {
         taskMapper.updateById(task);
         return "Comment Insert Into Task DB";
     }
+
+    @GetMapping("/deleteComment/{taskID}/{commentID}")
+    public String deleteComment(@PathVariable("taskID") Integer taskId,@PathVariable("commentID") Integer commentId){
+        Task task = taskMapper.selectById(taskId);
+        String str = task.getCommentsId();
+        ArrayList<String> arrayList = new ArrayList<>();
+        if(str != null){
+            for(String str1: DataConvert.splitString(task.getCommentsId())){
+                if(!str1.equals(commentId.toString()))
+                    arrayList.add(str1);
+            }
+        }
+        task.setCommentsId(DataConvert.concatString(arrayList));
+        taskMapper.updateById(task);
+        return "Comment Delete From The Task DB";
+    }
 }
 
 @Data

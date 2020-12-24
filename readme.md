@@ -12,4 +12,9 @@ This project is a prototype web app to manage someone’s time focus on campus. 
 
 As this is an only **toy** project, in the back end no authentication, no validation is provided, all HTTP requsts written in correct form will be accepted and executed by back end, and lots of code write only for learning purpose or just test the backend. so just take this toy project as a toy to play with, finding code that may be meaningless, just let it go.
 
-I Have no energy to maintain this. 
+It’s archived
+
+this readme is also available in [简体中文](./readme_zh.md)
+
+
+

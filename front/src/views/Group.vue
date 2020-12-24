@@ -19,10 +19,12 @@
           <!--          Open Dialog-->
           <!--        </v-btn>-->
           <!--      </template>-->
-          <v-card class="text-center">
+          <v-card>
             <v-card-title class="text-h4">{{ 'Detail:   ' + taskData.taskTitle }}</v-card-title>
             <v-divider></v-divider>
-            <v-card-text class="text-subtitle-1">{{ taskData.description }}</v-card-text>
+            <v-card-text style="height: 125px" class="text-body-1">
+              {{ taskData.description }}
+            </v-card-text>
             <v-divider></v-divider>
             <v-card-text style="height: 800px;">
               <!-- avatar contents user-->
@@ -43,7 +45,7 @@
                         >
                           mdi-alert-circle-outline
                         </v-icon>
-                        <span class="text-subtitle-1 font-weight-light">Detail</span>
+                        <span class="text-subtitle-1 grey--text font-weight-light">Detail</span>
                       </v-card-title>
 
                       <v-card-text class="text-body-2 font-weight-bold">
@@ -378,10 +380,10 @@
 
                           <v-list-item>
                             <v-list-item-icon class="mx-3">
-                              <v-icon>mdi-sony-playstation</v-icon>
+                              <v-icon color="indigo">mdi-sony-playstation</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
-                              <v-btn outlined x-small class="mx-0" @click="showDetail(task.id)">
+                              <v-btn outlined x-small color="indigo" class="mx-0" @click="showDetail(task.id)">
                                 Detail
                               </v-btn>
                             </v-list-item-content>
