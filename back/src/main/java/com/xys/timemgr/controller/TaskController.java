@@ -69,6 +69,11 @@ public class TaskController {
         return arrayList;
     }
 
+    @GetMapping("/task/{id}")
+    public Task getTaskByID(@PathVariable("id") Integer id){
+        return taskMapper.selectById(id);
+    }
+
     @GetMapping("/getState/{userID}/{taskID}")
     public int queryTask(@PathVariable("userID") Integer id, @PathVariable("taskID") Integer taskId) {
         Task task = taskMapper.selectById(taskId);
@@ -102,6 +107,13 @@ public class TaskController {
     public String[] getComments(@PathVariable("taskId") Integer id) {
         Task task = taskMapper.selectById(id);
         return DataConvert.splitString(task.getCommentsId());
+    }
+
+    @GetMapping("/search/{searchStr}")
+    public ArrayList<Task> search(@PathVariable("searchStr") String string){
+        ArrayList<Task> arrayList = new ArrayList<>();
+
+        return arrayList;
     }
 
     @GetMapping("/insertComment/{taskID}/{commentID}")

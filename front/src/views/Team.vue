@@ -78,9 +78,10 @@
             <v-spacer></v-spacer>
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="float-right" text color="blue" v-bind="attrs" v-on="on">
+                <v-btn @click="jump(group)" class=" float-right
+                " text color="blue" v-bind="attrs" v-on="on">
                   <v-icon small left>mdi-arrow-right-bold-hexagon-outline</v-icon>
-                  <span class="text-sm-body-2" @click="jump(group)">more</span>
+                  <span class="text-sm-body-2">more</span>
                 </v-btn>
               </template>
               <span>See Team Details</span>

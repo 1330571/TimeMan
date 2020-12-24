@@ -194,7 +194,8 @@ export default {
         { icon: 'mdi-account-supervisor', text: 'Team', router: '/team' },
         { icon: 'mdi-home', text: 'Home', router: '/home' },
         { icon: 'mdi-ab-testing', text: 'Group', router: '/group' },
-        { icon: 'mdi-tag', text: 'Tag', router: '/tag' }
+        { icon: 'mdi-tag', text: 'Tag', router: '/tag' },
+        { icon: 'mdi-card-search-outline', text: 'Search', router: '/search' }
       ]
     }
   },

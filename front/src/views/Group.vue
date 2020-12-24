@@ -4,6 +4,94 @@
     <template>
       <v-row justify="center">
         <v-dialog
+          v-if="taskData !== null"
+          v-model="detailShow"
+          scrollable
+          max-width="700px"
+        >
+          <!--      <template v-slot:activator="{ on, attrs }">-->
+          <!--        <v-btn-->
+          <!--          color="primary"-->
+          <!--          dark-->
+          <!--          v-bind="attrs"-->
+          <!--          v-on="on"-->
+          <!--        >-->
+          <!--          Open Dialog-->
+          <!--        </v-btn>-->
+          <!--      </template>-->
+          <v-card class="text-center">
+            <v-card-title class="text-h4">{{ 'Detail:   ' + taskData.taskTitle }}</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text class="text-subtitle-1">{{ taskData.description }}</v-card-text>
+            <v-divider></v-divider>
+            <v-card-text style="height: 800px;">
+              <!-- avatar contents user-->
+
+              <template>
+                <v-row>
+                  <v-col cols="4" v-for="(user,idx) in taskIDs"
+                         :key="idx">
+                    <v-card
+                      class="mx-auto"
+                      max-width="900"
+                      size="20"
+                    >
+                      <v-card-title>
+                        <v-icon
+                          x-small
+                          left
+                        >
+                          mdi-alert-circle-outline
+                        </v-icon>
+                        <span class="text-subtitle-1 font-weight-light">Detail</span>
+                      </v-card-title>
+
+                      <v-card-text class="text-body-2 font-weight-bold">
+
+                        <v-list-item class="m-0 p-0" dense>
+                          <v-list-item-avatar color="grey darken-3">
+                            <v-img
+                              class="elevation-6 mx-auto"
+                              alt=""
+                              :src="getAvatar(user)"
+                            ></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            {{ nameList[user] }}
+                          </v-list-item-content>
+                        </v-list-item>
+
+                        <v-btn x-small outlined :color="getColor(getStatus(statusIDs[idx]))">{{
+                            getStatus(statusIDs[idx])
+                          }}
+                        </v-btn>
+
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </template>
+
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="detailShow = false"
+              >
+                Close
+              </v-btn>
+
+            </v-card-actions>
+          </v-card>
+
+        </v-dialog>
+      </v-row>
+    </template>
+
+    <template>
+      <v-row justify="center">
+        <v-dialog
           v-model="commentShow"
           scrollable
           max-width="700px"
@@ -229,7 +317,7 @@
                 >
               </v-avatar>
             </v-card-title>
-            <v-card-text >{{ nameList[user] }}</v-card-text>
+            <v-card-text>{{ nameList[user] }}</v-card-text>
           </v-card>
         </v-row>
       </v-col>
@@ -287,6 +375,17 @@
                         </template>
 
                         <v-list dense>
+
+                          <v-list-item>
+                            <v-list-item-icon class="mx-3">
+                              <v-icon>mdi-sony-playstation</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                              <v-btn outlined x-small class="mx-0" @click="showDetail(task.id)">
+                                Detail
+                              </v-btn>
+                            </v-list-item-content>
+                          </v-list-item>
 
                           <v-list-item>
                             <v-list-item-icon class="mx-3">
@@ -370,6 +469,7 @@ export default {
   inject: ['reload'],
   components: {},
   data: () => ({
+    detailShow: false,
     menu: false,
     title: '',
     description: '',
@@ -384,7 +484,8 @@ export default {
     text: '',
     snackbar: false,
     snackbarColor: 'black',
-    comments: ''
+    comments: '',
+    taskData: null
   }),
   created () {
     this.group = this.$route.params.group
@@ -449,11 +550,23 @@ export default {
       return format(new Date(d), 'do MMM YYY - HH:MM:SS')
     },
     reloadComments () {
-      axios.get('http://localhost:8081/comment//getAllComments/' + this.selected).then(
+      axios.get('http://localhost:8081/comment/getAllComments/' + this.selected).then(
         response => {
           this.comments = response.data
         }
       )
+    },
+    reloadStatus () {
+      axios.get('http://localhost:8081/task/task/' + this.selected).then(
+        response => {
+          this.taskData = response.data
+        }
+      )
+    },
+    showDetail: function (id) {
+      this.detailShow = true
+      this.selected = id
+      this.reloadStatus()
     },
     showComment: function (id) {
       this.commentShow = true
@@ -501,6 +614,7 @@ export default {
         }
       )
     },
+
     showMessage: function (message, status) {
       this.text = message
       this.snackbar = true
@@ -510,6 +624,7 @@ export default {
         this.snackbarColor = status
       }
     },
+
     markTask: function (taskID, status) {
       axios.get('http://localhost:8081/task/setState/' + this.$store.state.id + '/' + taskID + '/' + status).then(response => {
         this.reload()
@@ -523,6 +638,18 @@ export default {
     }
   },
   computed: {
+    taskIDs () {
+      if (this.taskData === null) return ''
+      let qq = this.taskData.userList
+      if (qq[0] === '_') qq = qq.substr(1)
+      return qq.split('_')
+    },
+    statusIDs () {
+      if (this.taskData === null) return ''
+      let ss = this.taskData.statesList
+      if (ss[0] === '_') ss = ss.substr(1)
+      return ss.split('_')
+    },
     formattedDate () {
       return this.due !== '' ? format(new Date(this.due), 'do MMM YYY') : ''
     },
