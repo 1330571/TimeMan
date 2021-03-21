@@ -33,6 +33,10 @@ It’s **archived**
 - See your teams. the number and the color of icon denotes your remained tasks
 - ![image-20210321101551858](readme/image-20210321101551858.png)
 
+- See your team task and member statistics
+- ![image-20210321102215075](readme/image-20210321102215075.png)
+- ![image-20210321102233933](readme/image-20210321102233933.png)
+
 this readme is also available in [简体中文](./readme_zh.md)
 
 
